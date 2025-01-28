@@ -1,0 +1,24 @@
+name: datathon
+
+services:
+    postgresql:
+        image: bitnami/postgresql:latest
+        restart: unless-stopped
+        ports:
+            - "5432:5432/tcp"
+        volumes:
+            - pg-data:/bitnami/postgresql
+        environment:
+            - POSTGRESQL_USERNAME=postgres
+            - POSTGRESQL_PASSWORD=your_password
+
+    redis:
+        image: bitnami/redis:latest
+        restart: unless-stopped
+        ports:
+            - "6379:6379/tcp"
+        environment:
+            - ALLOW_EMPTY_PASSWORD=yes
+
+volumes:
+    pg-data:
