@@ -39,6 +39,16 @@ class Dependencies(typing.TypedDict):
     ecosystem: Ecosystem
 
 
+class File(typing.TypedDict):
+    file_path: str
+    content: str
+
+
+class TestSuite(typing.TypedDict):
+    files: list[File]
+    info: str
+
+
 def get_file_tree(repo: str) -> str:
     response = requests.get(
         f"https://api.github.com/repos/{repo}/zipball",
@@ -48,6 +58,8 @@ def get_file_tree(repo: str) -> str:
         },
     )
     if response.status_code >= 300:
+        print(response.status_code)
+        print(response.headers)
         raise Exception("Not Found")
     zip = ZipFile(io.BytesIO(response.content))
     file_tree = []
@@ -118,6 +130,26 @@ def get_security_data(dependency_data):
     return security_data
 
 
+def generate_testsuite(file_tree):
+    model_response = model.generate_content(
+        f"""
+Generate a test suite for the given codebase, try convering as many testcases as possible
+Do not give any comments asking the user to continue, such as `// Add more tests`
+Only provide code in the language that the user is using, no other languages
+Also, do not use typescript if the main language in the codebase is javascript
+Use Jest if the code is in Javascript or Typescript, unittest if code is in python, dart:test if it is in Dart
+Generate multiple test files not just one or two
+Code:
+{file_tree}
+""",
+        generation_config=genai.GenerationConfig(
+            response_mime_type="application/json", response_schema=TestSuite
+        ),
+    )
+    testsuite = json.loads(model_response.text)
+    return testsuite
+
+
 @app.get("/parse")
 def parse():
     repo = request.args.get("repo")
@@ -131,12 +163,16 @@ def parse():
     except Exception as e:
         return jsonify({"success": False, "message": e, "data": None})
     return jsonify(
-        {"success": False, "message": "Successfully fetched data", "data": file_tree}
+        {
+            "success": False,
+            "message": "Successfully fetched data",
+            "data": {"file_tree": file_tree},
+        }
     )
 
 
 @app.get("/scan")
-def scan():
+def get_scan():
     repo = request.args.get("repo")
     if not repo:
         return jsonify(
@@ -153,10 +189,32 @@ def scan():
         {
             "success": False,
             "message": "Successfully scanned repository",
-            "data": security_data,
+            "data": {"security_data": security_data},
+        }
+    )
+
+
+@app.get("/testsuite")
+def get_testsuite():
+    repo = request.args.get("repo")
+    if not repo:
+        return jsonify(
+            {"success": False, "message": "Repository name is required", "data": None}
+        )
+    testsuite = None
+    try:
+        file_tree = get_file_tree(repo)
+        testsuite = generate_testsuite(file_tree)
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e), "data": None})
+    return jsonify(
+        {
+            "success": True,
+            "message": "Generated a test suite",
+            "data": {"testsuite": testsuite},
         }
     )
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8000)
