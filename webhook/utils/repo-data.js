@@ -4,6 +4,7 @@ const scanRepository = async (repo, ghAccessToken) => {
     ).then(async (data) => {
         return await data.json();
     });
+    console.log(response);
     return response;
 };
 
@@ -13,6 +14,7 @@ const generateTestSuite = async (repo, ghAccessToken) => {
     ).then(async (data) => {
         return await data.json();
     });
+    console.log(response);
     return response;
 };
 
