@@ -1,6 +1,5 @@
 import { createWebhook, getUserRepositories } from "../utils/github-api.js";
 import { generateTestSuite, scanRepository } from "../utils/repo-data.js";
-import { v4 as uuid4 } from "uuid";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -69,58 +68,64 @@ const generateRepositoryWebHookHandler = async (req, res) => {
 };
 
 const generateRepositoryDataHandler = async (req, res) => {
-    try {
-        const { repo } = req.query;
-        const ghAccessToken = req.user.ghAccessToken;
+    const { repo } = req.query;
+    const ghAccessToken = req.user.ghAccessToken;
 
-        if (!repo || repo.trim() === "") {
-            return res.status(400).json({
-                success: false,
-                message: "Repository URL is required",
-                data: null,
-            });
-        }
-
-        const [scan, testsuite] = await Promise.all([
-            scanRepository(repo, ghAccessToken),
-            generateTestSuite(repo, ghAccessToken),
-        ]);
-
-        if (!scan.success) {
-            return res.status(500).json({
-                success: false,
-                message: "An error occurred when generating vulnerability scan",
-                data: null,
-            });
-        }
-
-        if (!testsuite.success) {
-            return res.status(500).json({
-                success: false,
-                message: "An error occurred when generating test suite",
-                data: null,
-            });
-        }
-
-        res.json({
-            success: true,
-            message: "Data generated successfully",
-            data: {
-                scan: scan.data,
-                testsuite: testsuite.data,
-            },
-        });
-    } catch (error) {
-        res.status(500).json({
+    if (!repo || repo.trim() === "") {
+        return res.status(400).json({
             success: false,
-            message: "An unexpected error occurred",
-            error: error.message,
+            message: "Repository URL is required",
+            data: null,
         });
     }
+
+    const [scan, testsuite] = await Promise.all([
+        scanRepository(repo, ghAccessToken),
+        generateTestSuite(repo, ghAccessToken),
+    ]);
+
+    if (!scan.success) {
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred when generating vulnerability scan",
+            data: null,
+        });
+    }
+
+    if (!testsuite.success) {
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred when generating test suite",
+            data: null,
+        });
+    }
+
+    res.json({
+        success: true,
+        message: "Data generated successfully",
+        data: {
+            scan: scan.data,
+            testsuite: testsuite.data,
+        },
+    });
+};
+
+const parseRepositoryHandler = async (req, res) => {
+    const { repo } = req.query;
+    const ghAccessToken = req.user.ghAccessToken;
+    const response = await fetch(
+        `${process.env.PY_URL}/parse?repo=${repo}&accessToken=${ghAccessToken}`,
+    ).then((data) => data.json());
+    return res.json({
+        success: true,
+        message: "Parsed repository",
+        data: response.data,
+    });
 };
 
 export {
     getRepositoriesHandler,
     generateRepositoryWebHookHandler,
     generateRepositoryDataHandler,
+    parseRepositoryHandler,
 };
