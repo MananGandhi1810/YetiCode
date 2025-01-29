@@ -1,10 +1,10 @@
-import { exists, get } from "./keyvalue-db.js";
+import { exists, get, set } from "./keyvalue-db.js";
 
 const scanRepository = async (repo, ghAccessToken, cached = true) => {
     if ((await exists(`${repo}:scan`)) && cached) {
         return {
             success: true,
-            data: await get(`${repo}:scan`),
+            data: JSON.parse(await get(`${repo}:scan`)),
             message: "Fetched data succesfully",
         };
     }
@@ -13,15 +13,15 @@ const scanRepository = async (repo, ghAccessToken, cached = true) => {
     ).then(async (data) => {
         return await data.json();
     });
-    await set(`${repo}:scan`, response.data);
+    await set(`${repo}:scan`, JSON.stringify(response.data), 3600 * 3);
     return response;
 };
 
-const generateTestSuite = async (repo, ghAccessToken, cached = false) => {
+const generateTestSuite = async (repo, ghAccessToken, cached = true) => {
     if ((await exists(`${repo}:testsuite`)) && cached) {
         return {
             success: true,
-            data: await get(`${repo}:testsuite`),
+            data: JSON.parse(await get(`${repo}:testsuite`)),
             message: "Fetched data succesfully",
         };
     }
@@ -30,7 +30,7 @@ const generateTestSuite = async (repo, ghAccessToken, cached = false) => {
     ).then(async (data) => {
         return await data.json();
     });
-    await set(`${repo}:testsuite`, response.data);
+    await set(`${repo}:testsuite`, JSON.stringify(response.data), 3600 * 3);
     return response;
 };
 
