@@ -15,7 +15,7 @@ export default function TokenPage() {
     const fetchAccessToken = async (requestToken) => {
       try {
         const response = await axios.post(
-          "https://b1d5-2401-4900-1980-fc28-198d-d063-482-58d3.ngrok-free.app/auth/get-access-token",
+          `https://4f7a-18-143-90-110.ngrok-free.app/auth/get-access-token`,
           {},
           {
             headers: {
