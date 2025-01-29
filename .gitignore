@@ -2,7 +2,10 @@ backend/.env
 hosting-backend/.env
 hosting-backend/node_modules
 
+webhook/.env
+frontend/.env
+webhook/.env
+frontend/.env
+
 .env
 node_modules
-
-migrations

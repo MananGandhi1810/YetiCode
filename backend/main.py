@@ -9,11 +9,13 @@ import os
 import dotenv
 import enum
 import typing_extensions as typing
+import redis
 
 dotenv.load_dotenv()
-
 app = Flask(__name__)
 CORS(app)
+
+r = redis.Redis(host=os.environ.get("REDIS_HOST"), port=os.environ.get("REDIS_PORT"))
 
 model = genai.GenerativeModel("gemini-1.5-flash-002")
 genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
@@ -49,17 +51,19 @@ class TestSuite(typing.TypedDict):
     info: str
 
 
-def get_file_tree(repo: str) -> str:
+def get_file_tree(repo: str, access_token: str) -> str:
+    cached = r.get(repo)
+    if cached:
+        return cached.decode()
     response = requests.get(
         f"https://api.github.com/repos/{repo}/zipball",
         headers={
             "User-Agent": "request",
             "Accept": "application/vnd.github+json",
+            "Authorization": "Bearer " + access_token,
         },
     )
     if response.status_code >= 300:
-        print(response.status_code)
-        print(response.headers)
         raise Exception("Not Found")
     zip = ZipFile(io.BytesIO(response.content))
     file_tree = []
@@ -71,11 +75,13 @@ def get_file_tree(repo: str) -> str:
             file_tree.append(f"\n---{file}---\n{contents}")
         except UnicodeDecodeError:
             pass
-    return "\n".join(file_tree)
+    data = "\n".join(file_tree)
+    r.set(repo, data, ex=60 * 60 * 2)
+    return data
 
 
-def get_dependencies(repo):
-    repo_file_tree = get_file_tree(repo)
+def get_dependencies(repo, access_token):
+    repo_file_tree = get_file_tree(repo, access_token)
     model_response = model.generate_content(
         f"""
 Analyze the code and get me the list of dependencies of this project. If there are multiple languages/ecosystems in the project, create a list of dependencies for each
@@ -89,24 +95,29 @@ This is my code:
     return dependency_data
 
 
-def get_security_data(dependency_data):
+def get_security_data(dependency_data, access_token):
     affects = []
     for dep, ver in [x.values() for x in dependency_data["dependencies"]]:
         if ver:
             affects.append(f"{dep}@{ver}")
         else:
             affects.append(dep)
-    affects = [affects[i : i + 3] for i in range(0, len(affects), 5)]
+    affects = [affects[i : i + 7] for i in range(0, len(affects), 7)]
     security_data = []
     for a in affects:
         response = requests.get(
             "https://api.github.com/advisories",
-            headers={"Accept": "application/vnd.github+json"},
+            headers={
+                "Accept": "application/vnd.github+json",
+                "Authorization": "Bearer " + access_token,
+            },
             params={
                 "affects": ",".join(a),
                 "ecosystem": dependency_data["ecosystem"],
             },
         )
+        if response.status_code >= 400:
+            raise Exception("Rate Limit Exceeded")
         security_data.extend(
             [
                 {
@@ -153,18 +164,27 @@ Code:
 @app.get("/parse")
 def parse():
     repo = request.args.get("repo")
+    access_token = request.args.get("accessToken")
     if not repo:
-        return jsonify(
-            {"success": False, "message": "Repository name is required", "data": None}
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Repository name is required",
+                    "data": None,
+                }
+            ),
+            400,
         )
     file_tree = ""
     try:
-        file_tree = get_file_tree(repo)
+        file_tree = get_file_tree(repo, access_token)
     except Exception as e:
-        return jsonify({"success": False, "message": e, "data": None})
+        print(e)
+        return jsonify({"success": False, "message": str(e), "data": None}), 500
     return jsonify(
         {
-            "success": False,
+            "success": True,
             "message": "Successfully fetched data",
             "data": {"file_tree": file_tree},
         }
@@ -174,20 +194,29 @@ def parse():
 @app.get("/scan")
 def get_scan():
     repo = request.args.get("repo")
+    access_token = request.args.get("accessToken")
     if not repo:
-        return jsonify(
-            {"success": False, "message": "Repository name is required", "data": None}
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Repository name is required",
+                    "data": None,
+                }
+            ),
+            400,
         )
     security_data = []
     try:
-        dependencies = get_dependencies(repo)
+        dependencies = get_dependencies(repo, access_token)
         for dependency_data in dependencies:
-            security_data.append(get_security_data(dependency_data))
+            security_data.append(get_security_data(dependency_data, access_token))
     except Exception as e:
-        return jsonify({"success": False, "message": str(e), "data": None})
+        print(e)
+        return jsonify({"success": False, "message": str(e), "data": None}), 500
     return jsonify(
         {
-            "success": False,
+            "success": True,
             "message": "Successfully scanned repository",
             "data": {"security_data": security_data},
         }
@@ -197,16 +226,25 @@ def get_scan():
 @app.get("/testsuite")
 def get_testsuite():
     repo = request.args.get("repo")
+    access_token = request.args.get("accessToken")
     if not repo:
-        return jsonify(
-            {"success": False, "message": "Repository name is required", "data": None}
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Repository name is required",
+                    "data": None,
+                }
+            ),
+            400,
         )
     testsuite = None
     try:
-        file_tree = get_file_tree(repo)
+        file_tree = get_file_tree(repo, access_token)
         testsuite = generate_testsuite(file_tree)
     except Exception as e:
-        return jsonify({"success": False, "message": str(e), "data": None})
+        print("\n\n\n", e)
+        return jsonify({"success": False, "message": str(e), "data": None}), 500
     return jsonify(
         {
             "success": True,
