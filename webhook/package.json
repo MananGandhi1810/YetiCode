@@ -1,0 +1,30 @@
+{
+  "name": "webhook",
+  "version": "1.0.0",
+  "description": "webhook for a hackathon project",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "dev": "node app.js",
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "@node-redis/client": "^1.0.6",
+    "@prisma/client": "^6.3.0",
+    "axios": "^1.7.9",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "prisma": "^6.3.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "keywords": [],
+  "author": "Your Name",
+  "license": "MIT"
+}
