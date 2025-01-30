@@ -5,7 +5,7 @@ services:
         image: bitnami/postgresql:latest
         restart: unless-stopped
         ports:
-            - "5432:5432/tcp"
+            - "2222:5432/tcp"
         volumes:
             - pg-data:/bitnami/postgresql
         environment:
@@ -16,7 +16,7 @@ services:
         image: bitnami/redis:latest
         restart: unless-stopped
         ports:
-            - "6379:6379/tcp"
+            - "9736:6379/tcp"
         environment:
             - ALLOW_EMPTY_PASSWORD=yes
 

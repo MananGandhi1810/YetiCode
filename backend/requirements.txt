@@ -3,6 +3,7 @@ Flask-Cors==5.0.0
 pillow==11.1.0
 python-dotenv==1.0.1
 typing_extensions
-google
-typing_extensions
+google-generativeai
+typing-extensions
 redis
+requests
