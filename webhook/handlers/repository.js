@@ -1,6 +1,7 @@
 import { createWebhook, getUserRepositories } from "../utils/github-api.js";
 import {
     generateDiagram,
+    generateReadMe,
     generateTestSuite,
     scanRepository,
 } from "../utils/repo-data.js";
@@ -87,10 +88,11 @@ const generateRepositoryDataHandler = async (req, res) => {
         });
     }
 
-    const [scan, testsuite, diagram] = await Promise.all([
+    const [scan, testsuite, diagram, readme] = await Promise.all([
         scanRepository(repo, ghAccessToken),
         generateTestSuite(repo, ghAccessToken),
         generateDiagram(repo, ghAccessToken),
+        generateReadMe(repo, ghAccessToken),
     ]);
 
     if (!scan.success) {
@@ -100,11 +102,24 @@ const generateRepositoryDataHandler = async (req, res) => {
             data: null,
         });
     }
-
     if (!testsuite.success) {
         return res.status(500).json({
             success: false,
             message: "An error occurred when generating test suite",
+            data: null,
+        });
+    }
+    if (!diagram.success) {
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred when generating diagram",
+            data: null,
+        });
+    }
+    if (!readme.success) {
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred when generating readme",
             data: null,
         });
     }
@@ -116,6 +131,7 @@ const generateRepositoryDataHandler = async (req, res) => {
             scan: scan.data.security_data,
             testsuite: testsuite.data.testsuite,
             diagram: diagram.data.diagram,
+            readme: readme.data.readme,
         },
     });
 };

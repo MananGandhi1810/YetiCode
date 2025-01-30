@@ -51,4 +51,21 @@ const generateDiagram = async (repo, ghAccessToken, cached = true) => {
     return response;
 };
 
-export { scanRepository, generateTestSuite, generateDiagram };
+const generateReadMe = async (repo, ghAccessToken, cached = true) => {
+    if ((await exists(`${repo}:readme`)) && cached) {
+        return {
+            success: true,
+            data: JSON.parse(await get(`${repo}:readme`)),
+            message: "Fetched data succesfully",
+        };
+    }
+    const response = await fetch(
+        `${process.env.PY_URL}/readme?repo=${repo}&accessToken=${ghAccessToken}`,
+    ).then(async (data) => {
+        return await data.json();
+    });
+    await set(`${repo}:readme`, JSON.stringify(response.data), 3600 * 3);
+    return response;
+};
+
+export { scanRepository, generateTestSuite, generateDiagram, generateReadMe };

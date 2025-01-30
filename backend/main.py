@@ -56,6 +56,11 @@ class Diagram(typing.TypedDict):
     info: str
 
 
+class ReadMe(typing.TypedDict):
+    readme: str
+    info: str
+
+
 def get_file_tree(repo: str, access_token: str) -> str:
     cached = r.get(repo)
     if cached:
@@ -181,8 +186,25 @@ Code:
             response_mime_type="application/json", response_schema=Diagram
         ),
     )
-    testsuite = json.loads(model_response.text)
-    return testsuite
+    diagram = json.loads(model_response.text)
+    return diagram
+
+
+def generate_readme(file_tree):
+    model_response = model.generate_content(
+        f"""
+Generate a good README.md for the given code
+USE Markdown format
+Make sure to explain everything in detail, including tech stack, features, setup methods and whatever else seems good
+Code:
+{file_tree}
+""",
+        generation_config=genai.GenerationConfig(
+            response_mime_type="application/json", response_schema=ReadMe
+        ),
+    )
+    readme = json.loads(model_response.text)
+    return readme
 
 
 @app.get("/parse")
@@ -307,6 +329,37 @@ def get_diagram():
             "success": True,
             "message": "Generated a diagram",
             "data": {"diagram": diagram},
+        }
+    )
+
+
+@app.get("/readme")
+def get_readme():
+    repo = request.args.get("repo")
+    access_token = request.args.get("accessToken")
+    if not repo:
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Repository name is required",
+                    "data": None,
+                }
+            ),
+            400,
+        )
+    diagram = None
+    try:
+        file_tree = get_file_tree(repo, access_token)
+        diagram = generate_readme(file_tree)
+    except Exception as e:
+        print("\n\n\n", e)
+        return jsonify({"success": False, "message": str(e), "data": None}), 500
+    return jsonify(
+        {
+            "success": True,
+            "message": "Generated a README",
+            "data": {"readme": diagram},
         }
     )
 
