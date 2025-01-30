@@ -11,33 +11,31 @@ export default function TokenPage() {
     const [requestToken, setRequestToken] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchAccessToken = async (requestToken) => {
-            try {
-                const response = await axios.post(
-                    `${
-                        process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5001"
-                    }/auth/get-access-token`,
-                    {},
-                    {
-                        headers: {
-                            Authorization: `Bearer ${requestToken}`,
-                        },
-                    },
-                );
-                const token = response.data.data.accessToken;
-                setAccessToken(token);
+  useEffect(() => {
+    const fetchAccessToken = async (requestToken) => {
+      try {
+        const response = await axios.post(
+          "https://dt-backend.mpst.me/auth/get-access-token",
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${requestToken}`,
+            },
+          }
+        );
+        const token = response.data.data.accessToken;
+        setAccessToken(token);
 
                 localStorage.setItem("accessToken", token);
 
-                router.push("/");
-            } catch (err) {
-                console.error("Error retrieving access token:", err);
-                setError("Failed to retrieve access token");
-            } finally {
-                setIsLoading(false);
-            }
-        };
+        router.push("/dashboard");
+      } catch (err) {
+        console.error("Error retrieving access token:", err);
+        setError("Failed to retrieve access token");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
         // Get request token from URL
         const params = new URLSearchParams(window.location.search);
