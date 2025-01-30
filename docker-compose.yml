@@ -7,7 +7,7 @@ services:
         ports:
             - "2222:5432/tcp"
         volumes:
-            - pg-data:/bitnami/postgresql
+            - datathon-data:/bitnami/postgresql
         environment:
             - POSTGRESQL_USERNAME=postgres
             - POSTGRESQL_PASSWORD=your_password
@@ -35,6 +35,7 @@ services:
             - "5555:5000/tcp"
         volumes:
             - ./webhook/.env:/usr/src/app/.env
+        command: "npx prisma migrate dev && npm start"
 
 volumes:
-    pg-data:
+    datathon-data:
