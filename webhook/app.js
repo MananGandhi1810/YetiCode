@@ -5,7 +5,9 @@ import authRouter from "./routes/auth.js";
 import morgan from "morgan";
 import repositoryRouter from "./routes/repository.js";
 import webhookRouter from "./routes/webhook.js";
+import { configDotenv } from "dotenv";
 
+configDotenv();
 var app = express();
 
 app.use(
