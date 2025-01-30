@@ -8,8 +8,8 @@ RUN npx prisma generate
 FROM node:lts-alpine AS production
 WORKDIR /usr/src/app
 RUN apk add --no-cache openssl 
-COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app/prisma ./prisma/
+COPY --from=builder --chown=node:node /usr/src/app/node_modules ./node_modules
+COPY --from=builder --chown=node:node /usr/src/app/prisma ./prisma/
 COPY . . 
 EXPOSE 5000
 USER node
