@@ -1,0 +1,402 @@
+{
+    "data": {
+        "success": true,
+        "message": "Repositories fetched successfully",
+        "data": {
+            "repositories": [
+                {
+                    "name": "TQ_DeptClassifier",
+                    "url": "https://github.com/Ar-Srivas/TQ_DeptClassifier.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "cycle_taqneeq",
+                    "url": "https://github.com/ArhaanB24/cycle_taqneeq.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "indiv",
+                    "url": "https://github.com/KartikJain14/indiv.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "sattva",
+                    "url": "https://github.com/kaustubmule/sattva.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "datathon-round-2",
+                    "url": "https://github.com/MananGandhi1810/datathon-round-2.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "level-supermind-assignment",
+                    "url": "https://github.com/MananGandhi1810/level-supermind-assignment.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "level-supermind-hackathon-2025",
+                    "url": "https://github.com/MananGandhi1810/level-supermind-hackathon-2025.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "mumbai-hacks-24",
+                    "url": "https://github.com/MananGandhi1810/mumbai-hacks-24.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "studentcouncil",
+                    "url": "https://github.com/myshabhartiya/studentcouncil.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "analytika-website",
+                    "url": "https://github.com/naitiklodha/analytika-website.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "codebase-mpstme",
+                    "url": "https://github.com/naitiklodha/codebase-mpstme.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "cycle",
+                    "url": "https://github.com/naitiklodha/cycle.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "data-hunt",
+                    "url": "https://github.com/naitiklodha/data-hunt.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "gpa-calculator",
+                    "url": "https://github.com/naitiklodha/gpa-calculator.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "level-supermind-frontend",
+                    "url": "https://github.com/naitiklodha/level-supermind-frontend.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "vivid-landing-template",
+                    "url": "https://github.com/naitiklodha/vivid-landing-template.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "Accounts_variance_analysis",
+                    "url": "https://github.com/saanvi-kanodia/Accounts_variance_analysis.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "uidai-clone",
+                    "url": "https://github.com/sid-lakhani/uidai-clone.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "91turbo",
+                    "url": "https://github.com/yashd-dev/91turbo.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "ACM-Chronicles",
+                    "url": "https://github.com/yashd-dev/ACM-Chronicles.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "ACM-Chronicles-Sanity-CMS",
+                    "url": "https://github.com/yashd-dev/ACM-Chronicles-Sanity-CMS.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "ACM-PFE-Site",
+                    "url": "https://github.com/yashd-dev/ACM-PFE-Site.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "ACM-Schema",
+                    "url": "https://github.com/yashd-dev/ACM-Schema.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "art",
+                    "url": "https://github.com/yashd-dev/art.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "astronewsletter",
+                    "url": "https://github.com/yashd-dev/astronewsletter.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "CC3.0",
+                    "url": "https://github.com/yashd-dev/CC3.0.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "ChatApp",
+                    "url": "https://github.com/yashd-dev/ChatApp.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "Chatbot",
+                    "url": "https://github.com/yashd-dev/Chatbot.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "codeconnectt",
+                    "url": "https://github.com/yashd-dev/codeconnectt.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "College-Assignment-Homepage",
+                    "url": "https://github.com/yashd-dev/College-Assignment-Homepage.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "CPP-Programing",
+                    "url": "https://github.com/yashd-dev/CPP-Programing.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "Datathon",
+                    "url": "https://github.com/yashd-dev/Datathon.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "datathon-round-1",
+                    "url": "https://github.com/yashd-dev/datathon-round-1.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "docs",
+                    "url": "https://github.com/yashd-dev/docs.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "DSA-Practice",
+                    "url": "https://github.com/yashd-dev/DSA-Practice.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "DSA-Project",
+                    "url": "https://github.com/yashd-dev/DSA-Project.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "errorz404",
+                    "url": "https://github.com/yashd-dev/errorz404.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "experimenting-flask",
+                    "url": "https://github.com/yashd-dev/experimenting-flask.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "ezpay",
+                    "url": "https://github.com/yashd-dev/ezpay.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "gpa-calculator",
+                    "url": "https://github.com/yashd-dev/gpa-calculator.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "LaPros",
+                    "url": "https://github.com/yashd-dev/LaPros.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "MediEthics-Website",
+                    "url": "https://github.com/yashd-dev/MediEthics-Website.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "Newsletter-posts",
+                    "url": "https://github.com/yashd-dev/Newsletter-posts.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "nextjs-commerce",
+                    "url": "https://github.com/yashd-dev/nextjs-commerce.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "nextjs-dashboard",
+                    "url": "https://github.com/yashd-dev/nextjs-dashboard.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "ngo-portal",
+                    "url": "https://github.com/yashd-dev/ngo-portal.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "ngrok-redirect",
+                    "url": "https://github.com/yashd-dev/ngrok-redirect.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "portal-automation",
+                    "url": "https://github.com/yashd-dev/portal-automation.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "Portfolio",
+                    "url": "https://github.com/yashd-dev/Portfolio.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "Portfolio-v2",
+                    "url": "https://github.com/yashd-dev/Portfolio-v2.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "Portfolio-v3",
+                    "url": "https://github.com/yashd-dev/Portfolio-v3.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "Portfolio-v5",
+                    "url": "https://github.com/yashd-dev/Portfolio-v5.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "Portfolio-v6",
+                    "url": "https://github.com/yashd-dev/Portfolio-v6.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "portfoliov7",
+                    "url": "https://github.com/yashd-dev/portfoliov7.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "porttfolio-teaching",
+                    "url": "https://github.com/yashd-dev/porttfolio-teaching.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "Prolink",
+                    "url": "https://github.com/yashd-dev/Prolink.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "Python-Problems",
+                    "url": "https://github.com/yashd-dev/Python-Problems.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "RPS-using-OpenCv",
+                    "url": "https://github.com/yashd-dev/RPS-using-OpenCv.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "sanitytesting",
+                    "url": "https://github.com/yashd-dev/sanitytesting.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "sanveevni",
+                    "url": "https://github.com/yashd-dev/sanveevni.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "Sattva-25",
+                    "url": "https://github.com/yashd-dev/Sattva-25.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "short",
+                    "url": "https://github.com/yashd-dev/short.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "simple-proxy",
+                    "url": "https://github.com/yashd-dev/simple-proxy.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "Social-Conclave-Site",
+                    "url": "https://github.com/yashd-dev/Social-Conclave-Site.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "ss-healthcare",
+                    "url": "https://github.com/yashd-dev/ss-healthcare.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "Startpage",
+                    "url": "https://github.com/yashd-dev/Startpage.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "strapi-nextjs-corporate-starter",
+                    "url": "https://github.com/yashd-dev/strapi-nextjs-corporate-starter.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "teaching-astro",
+                    "url": "https://github.com/yashd-dev/teaching-astro.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "testing",
+                    "url": "https://github.com/yashd-dev/testing.git",
+                    "visibility": "private"
+                },
+                {
+                    "name": "Wallpapers",
+                    "url": "https://github.com/yashd-dev/Wallpapers.git",
+                    "visibility": "public"
+                },
+                {
+                    "name": "yashd-dev",
+                    "url": "https://github.com/yashd-dev/yashd-dev.git",
+                    "visibility": "public"
+                }
+            ]
+        }
+    },
+    "status": 200,
+    "statusText": "",
+    "headers": {
+        "content-length": "7449",
+        "content-type": "application/json; charset=utf-8"
+    },
+    "config": {
+        "transitional": {
+            "silentJSONParsing": true,
+            "forcedJSONParsing": true,
+            "clarifyTimeoutError": false
+        },
+        "adapter": [
+            "xhr",
+            "http",
+            "fetch"
+        ],
+        "transformRequest": [
+            null
+        ],
+        "transformResponse": [
+            null
+        ],
+        "timeout": 0,
+        "xsrfCookieName": "XSRF-TOKEN",
+        "xsrfHeaderName": "X-XSRF-TOKEN",
+        "maxContentLength": -1,
+        "maxBodyLength": -1,
+        "env": {},
+        "headers": {
+            "Accept": "application/json, text/plain, */*",
+            "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Inlhc2hkZXNocGFuZGU3MTRAZ21haWwuY29tIiwibmFtZSI6Illhc2ggRCIsImlkIjoiY202aHh3MWxxMDAwMHR6bzV2ZW15NG1zdiIsInNjb3BlIjoiYWNjZXNzIiwiaWF0IjoxNzM4MTU3NzUwfQ.3SsU2-FQp-FW917LZr0sBguwGF_GTRL3ueCtnfyTmIU"
+        },
+        "method": "get",
+        "url": "https://cc84-14-139-125-227.ngrok-free.app/repository/list"
+    },
+    "request": {}
+}
