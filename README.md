@@ -8,7 +8,6 @@ YetiCode is a web application designed to significantly reduce development time 
 -   **Enhanced Security:** Identify vulnerabilities and security risks in your codebase before they become a major concern.
 -   **Smarter Testing:** Automatically generate and run tests with AI assistance, covering a wider range of scenarios and edge cases.
 -   **Automated Updates:** Receive real-time alerts on every push, providing constant monitoring and immediate insights into your application.
--   **Simplified Deployment:** Streamline the deployment process, ensuring quick and consistent updates to your projects.
 
 **Tech Stack:**
 
