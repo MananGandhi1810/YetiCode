@@ -11,6 +11,6 @@ RUN apk add --no-cache openssl
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/prisma ./prisma/
 COPY . . 
-EXPOSE 3000
+EXPOSE 5000
 USER node
 CMD ["npm", "start"]
