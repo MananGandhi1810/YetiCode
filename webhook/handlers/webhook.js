@@ -6,16 +6,43 @@ const prisma = new PrismaClient();
 const ghRepoRegex =
     /https?:\/\/(www\.)?github.com\/(?<owner>[\w.-]+)\/(?<name>[\w.-]+)/;
 
+const getWebhookDataHandler = async (req, res) => {
+    const { webhookId } = req.params;
+
+    const webhook = await prisma.webHook.findUnique({
+        where: { id: webhookId },
+    });
+    if (!webhook) {
+        return res.status(404).json({
+            success: false,
+            message: "Webhook not found",
+            data: null,
+        });
+    }
+    return res.json({
+        success: true,
+        message: "Webhook found",
+        data: { webhook },
+    });
+};
+
 const incomingWebhookHandler = async (req, res) => {
     const { webhookId } = req.params;
 
-    const repoData = await prisma.webHook.findUnique({
+    const webhook = await prisma.webHook.findUnique({
         where: { id: webhookId },
         include: { user: true },
     });
-    const match = repoData.repoUrl.match(ghRepoRegex);
+    if (!webhook) {
+        return res.status(404).json({
+            success: false,
+            message: "Webhook not found",
+            data: null,
+        });
+    }
+    const match = webhook.repoUrl.match(ghRepoRegex);
     const repo = `${match.groups.owner}/${match.groups.name}`;
-    processData(repo, repoData, repoData.user.email);
+    processData(repo, webhook, webhook.user.email);
 
     return res.json({
         success: true,
@@ -25,18 +52,19 @@ const incomingWebhookHandler = async (req, res) => {
 };
 
 const webHookListHandler = async (req, res) => {
-    const { userId } = req.user;
+    const { id } = req.user;
 
     const webHookData = await prisma.webHook.findMany({
-        where: { userId: userId },
+        where: { userId: id },
     });
 
     return res.json({
         success: true,
+        message: "Webhook data found",
         data: {
             webHookData,
         },
     });
 };
 
-export { incomingWebhookHandler, webHookListHandler };
+export { getWebhookDataHandler, incomingWebhookHandler, webHookListHandler };

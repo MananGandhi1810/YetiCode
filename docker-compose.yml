@@ -20,5 +20,21 @@ services:
         environment:
             - ALLOW_EMPTY_PASSWORD=yes
 
+    python:
+        image: ghcr.io/manangandhi1810/datathon-round-2-python:latest
+        restart: unless-stopped
+        ports:
+            - "8888:8000/tcp"
+        volumes:
+            - ./backend/.env:/app/.env
+
+    express:
+        image: ghcr.io/manangandhi1810/datathon-round-2-express:latest
+        restart: unless-stopped
+        ports:
+            - "5555:5000/tcp"
+        volumes:
+            - ./webhook/.env:/usr/src/app/.env
+
 volumes:
     pg-data:

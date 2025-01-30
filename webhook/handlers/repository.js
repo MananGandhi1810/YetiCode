@@ -3,6 +3,8 @@ import { generateTestSuite, scanRepository } from "../utils/repo-data.js";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
+const ghRepoRegex =
+    /https?:\/\/(www\.)?github.com\/(?<owner>[\w.-]+)\/(?<name>[\w.-]+)/;
 
 const getRepositoriesHandler = async (req, res) => {
     try {
@@ -38,16 +40,19 @@ const getRepositoriesHandler = async (req, res) => {
 };
 
 const generateRepositoryWebHookHandler = async (req, res) => {
-    const { repo } = req.query;
+    const { repo: url } = req.query;
     const ghAccessToken = req.user.ghAccessToken;
 
-    if (!repo || repo.trim() === "") {
+    if (!url || url.trim() === "") {
         return res.status(400).json({
             success: false,
             message: "Repository URL is required",
             data: null,
         });
     }
+
+    const match = url.match(ghRepoRegex);
+    const repo = `${match.groups.owner}/${match.groups.name}`;
 
     const webhook = await prisma.webHook.create({
         data: {
@@ -58,7 +63,6 @@ const generateRepositoryWebHookHandler = async (req, res) => {
         },
     });
     const webhookRequest = await createWebhook(webhook.id, ghAccessToken, repo);
-    console.log(webhookRequest);
 
     res.json({
         success: true,
