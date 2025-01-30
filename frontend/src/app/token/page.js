@@ -16,7 +16,7 @@ export default function TokenPage() {
             try {
                 const response = await axios.post(
                     `${
-                        process.env.SERVER_URL || "http://localhost:5001"
+                        process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5001"
                     }/auth/get-access-token`,
                     {},
                     {
