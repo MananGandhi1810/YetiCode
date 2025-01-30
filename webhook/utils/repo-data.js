@@ -34,4 +34,21 @@ const generateTestSuite = async (repo, ghAccessToken, cached = true) => {
     return response;
 };
 
-export { scanRepository, generateTestSuite };
+const generateDiagram = async (repo, ghAccessToken, cached = true) => {
+    if ((await exists(`${repo}:diagram`)) && cached) {
+        return {
+            success: true,
+            data: JSON.parse(await get(`${repo}:diagram`)),
+            message: "Fetched data succesfully",
+        };
+    }
+    const response = await fetch(
+        `${process.env.PY_URL}/diagram?repo=${repo}&accessToken=${ghAccessToken}`,
+    ).then(async (data) => {
+        return await data.json();
+    });
+    await set(`${repo}:diagram`, JSON.stringify(response.data), 3600 * 3);
+    return response;
+};
+
+export { scanRepository, generateTestSuite, generateDiagram };

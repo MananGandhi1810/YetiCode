@@ -35,7 +35,7 @@ services:
             - "5555:5000/tcp"
         volumes:
             - ./webhook/.env:/usr/src/app/.env
-        command: "npx prisma migrate dev && npm start"
+        command: sh -c "npx prisma migrate deploy && npm run start"
 
 volumes:
     datathon-data:

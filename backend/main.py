@@ -51,6 +51,11 @@ class TestSuite(typing.TypedDict):
     info: str
 
 
+class Diagram(typing.TypedDict):
+    diagram_code: str
+    info: str
+
+
 def get_file_tree(repo: str, access_token: str) -> str:
     cached = r.get(repo)
     if cached:
@@ -150,11 +155,30 @@ Only provide code in the language that the user is using, no other languages
 Also, do not use typescript if the main language in the codebase is javascript
 Use Jest if the code is in Javascript or Typescript, unittest if code is in python, dart:test if it is in Dart
 Generate multiple test files not just one or two
+DO NOT use any markdown
 Code:
 {file_tree}
 """,
         generation_config=genai.GenerationConfig(
             response_mime_type="application/json", response_schema=TestSuite
+        ),
+    )
+    testsuite = json.loads(model_response.text)
+    return testsuite
+
+
+def generate_diagram(file_tree):
+    model_response = model.generate_content(
+        f"""
+Generate the working of the project through mermaid code, explain every single unit in the system
+Explain an arrow if necessary
+DO NOT include `()` at all costs
+DO NOT use any markdown
+Code:
+{file_tree}
+""",
+        generation_config=genai.GenerationConfig(
+            response_mime_type="application/json", response_schema=Diagram
         ),
     )
     testsuite = json.loads(model_response.text)
@@ -209,15 +233,17 @@ def get_scan():
     security_data = []
     try:
         dependencies = get_dependencies(repo, access_token)
+        print(dependencies)
         for dependency_data in dependencies:
-            security_data.append(get_security_data(dependency_data, access_token))
+            data = get_security_data(dependency_data, access_token)
+            security_data.extend(data)
     except Exception as e:
         print(e)
         return jsonify({"success": False, "message": str(e), "data": None}), 500
     return jsonify(
         {
             "success": True,
-            "message": "Successfully scanned repository",
+            "message": "Scanned repository",
             "data": {"security_data": security_data},
         }
     )
@@ -254,6 +280,36 @@ def get_testsuite():
     )
 
 
+@app.get("/diagram")
+def get_diagram():
+    repo = request.args.get("repo")
+    access_token = request.args.get("accessToken")
+    if not repo:
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Repository name is required",
+                    "data": None,
+                }
+            ),
+            400,
+        )
+    diagram = None
+    try:
+        file_tree = get_file_tree(repo, access_token)
+        diagram = generate_diagram(file_tree)
+    except Exception as e:
+        print("\n\n\n", e)
+        return jsonify({"success": False, "message": str(e), "data": None}), 500
+    return jsonify(
+        {
+            "success": True,
+            "message": "Generated a diagram",
+            "data": {"diagram": diagram},
+        }
+    )
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=8000)
-    

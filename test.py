@@ -1,0 +1,3 @@
+print(
+    "graph LR\n    A[GitHub Push Event] --> B{Commit Message Contains '[backend]' or '[all]'};\n    B -- Yes --> C[Express.yaml Workflow];\n    B -- No --> D;\n    C --> E[Docker Image CI];\n    E --> F[Docker Image Built and Pushed];\n    A --> G{Commit Message Contains '[backend]' or '[all]'};\n    G -- Yes --> H[python.yaml Workflow];\n    G -- No --> D;\n    H --> I[Docker Image CI];\n    I --> J[Docker Image Built and Pushed];\n    C --> K[Setup QEMU];\n    H --> K;\n    K --> L[Checkout];\n    L --> M[Log in to Container Registry];\n    M --> N[Setup Docker Buildx];\n    N --> E;\n    N --> I;\n    F --> O[Express Image in ghcr.io];\n    J --> P[Python Image in ghcr.io];\n    D[No action]\n    "
+)

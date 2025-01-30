@@ -1,5 +1,9 @@
 import { createWebhook, getUserRepositories } from "../utils/github-api.js";
-import { generateTestSuite, scanRepository } from "../utils/repo-data.js";
+import {
+    generateDiagram,
+    generateTestSuite,
+    scanRepository,
+} from "../utils/repo-data.js";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -83,9 +87,10 @@ const generateRepositoryDataHandler = async (req, res) => {
         });
     }
 
-    const [scan, testsuite] = await Promise.all([
+    const [scan, testsuite, diagram] = await Promise.all([
         scanRepository(repo, ghAccessToken),
         generateTestSuite(repo, ghAccessToken),
+        generateDiagram(repo, ghAccessToken),
     ]);
 
     if (!scan.success) {
@@ -108,8 +113,9 @@ const generateRepositoryDataHandler = async (req, res) => {
         success: true,
         message: "Data generated successfully",
         data: {
-            scan: scan.data,
-            testsuite: testsuite.data,
+            scan: scan.data.security_data,
+            testsuite: testsuite.data.testsuite,
+            diagram: diagram.data.diagram,
         },
     });
 };
