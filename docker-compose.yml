@@ -37,5 +37,13 @@ services:
             - ./webhook/.env:/usr/src/app/.env
         command: sh -c "npx prisma migrate deploy && npm run start"
 
+    frontend:
+        image: ghcr.io/manangandhi1810/datathon-round-2-frontend:latest
+        restart: unless-stopped
+        ports:
+            - "3005:3005/tcp"
+        volumes:
+            - ./backend/.env:/app/.env
+
 volumes:
     datathon-data:
