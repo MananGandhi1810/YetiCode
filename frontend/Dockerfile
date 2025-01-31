@@ -9,7 +9,7 @@ COPY . .
 
 # Install dependencies
 RUN npm i -g pnpm
-RUN pnpm ci
+RUN pnpm i
 
 # Build the application
 RUN npm run build
