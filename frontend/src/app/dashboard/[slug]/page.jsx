@@ -3,8 +3,8 @@ import Dashi from "./dashi";
 
 export default async function Page({ params }) {
   // Extract and decode the slug from params
-  const slug = decodeURIComponent((await params).slug);
-  console.log("Slug:", slug);
+  const slug = (await params).slug;
+  let repo = "";
   let data = "";
   function getRepoFullName(url) {
     const regex =
@@ -13,15 +13,16 @@ export default async function Page({ params }) {
     return match ? `${match[1]}/${match[2].replace(/\.git$/, "")}` : null;
   }
 
-  // Fetch data from the API
+  // // Fetch data from the API
+  console.log(slug);
   let responseData = null;
   try {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/webhook/${slug}`
     );
-    const url = response.data.data.webhook.repoUrl; // Extract response data
+    let url = response.data.data.webhook.repoUrl;
     data = getRepoFullName(url);
-    console.log(data);
+    console.log(repo);
   } catch (error) {
     console.error("Error fetching webhook data:", error);
   }

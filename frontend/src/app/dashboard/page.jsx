@@ -85,7 +85,7 @@ export default function ProjectList() {
         }
       );
       console.log(projectsResponse.data);
-      setProjects(projectsResponse.data.data || []);
+      window.location.reload();
     } catch (err) {
       console.error("Error adding project:", err);
       setError("Failed to add project. Please try again.");
