@@ -16,6 +16,7 @@ RUN npm run build
 
 # Expose the port the app runs on
 EXPOSE 3005
+EXPOSE 3000
 
 # Set environment variables
 ENV PORT=3000
