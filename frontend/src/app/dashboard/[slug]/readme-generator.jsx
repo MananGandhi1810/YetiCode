@@ -1,29 +1,21 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { FileText } from "lucide-react";
-import Markdown from "react-markdown";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import ReactMarkdown from "react-markdown"
 
 export default function ReadmeGenerator({ data }) {
+  if (!data) {
+    return <div>Loading README data...</div>
+  }
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <FileText className="w-6 h-6 text-blue-500" />
-          README Generator
-        </CardTitle>
-        <CardDescription>
-          Automatically generate comprehensive README files for your projects
-        </CardDescription>
+        <CardTitle>Generated README</CardTitle>
+        <CardDescription>AI-generated README for your project</CardDescription>
       </CardHeader>
-      <CardContent>
-        <Markdown>{data.readme}</Markdown>
-        {/* {JSON.stringify(data.readme.readme)} */}
+      <CardContent >
+        <ReactMarkdown className="prose max-w-none prose-invert">{data.readme}</ReactMarkdown>
       </CardContent>
     </Card>
-  );
+  )
 }
+
