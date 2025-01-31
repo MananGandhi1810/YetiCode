@@ -8,7 +8,8 @@ WORKDIR /app
 COPY . .
 
 # Install dependencies
-RUN npm ci
+RUN npm i -g pnpm
+RUN pnpm ci
 
 # Build the application
 RUN npm run build
