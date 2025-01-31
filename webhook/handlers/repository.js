@@ -133,6 +133,8 @@ const generateRepositoryDataHandler = async (req, res) => {
         });
     }
 
+    console.log(filetree)
+
     res.json({
         success: true,
         message: "Data generated successfully",

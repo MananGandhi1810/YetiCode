@@ -4,7 +4,7 @@ const getFileTree = async (repo, ghAccessToken, cached = true) => {
     if ((await exists(`${repo}:filetree`)) && cached) {
         return {
             success: true,
-            data: JSON.parse(await get(`${repo}:scan`)),
+            data: JSON.parse(await get(`${repo}:filetree`)),
             message: "Fetched data succesfully",
         };
     }
