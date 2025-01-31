@@ -3,9 +3,9 @@ import Dashi from "./dashi";
 
 export default async function Page({ params }) {
   // Extract and decode the slug from params
-  const slug = decodeURIComponent(params.slug); // Ensures that %2F is converted to '/'
+  const slug = decodeURIComponent((await params).slug);
   console.log("Slug:", slug);
-let data=""
+  let data = "";
   function getRepoFullName(url) {
     const regex =
       /(?:https?:\/\/)?(?:www\.)?github\.com\/([^\/]+)\/([^\/]+)(?:\.git)?\/?$/;
@@ -17,11 +17,11 @@ let data=""
   let responseData = null;
   try {
     const response = await axios.get(
-      `https://dt-backend.mpst.me/webhook/${slug}`
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/webhook/${slug}`
     );
     const url = response.data.data.webhook.repoUrl; // Extract response data
-     data = getRepoFullName(url);
-     console.log(data)
+    data = getRepoFullName(url);
+    console.log(data);
   } catch (error) {
     console.error("Error fetching webhook data:", error);
   }

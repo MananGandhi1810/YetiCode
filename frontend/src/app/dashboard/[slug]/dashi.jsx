@@ -21,18 +21,19 @@ export default function Dashi({ slug }) {
   const [data, setData] = useState();
   useEffect(() => {
     const fetchData = async () => {
+      const accessToken = localStorage.getItem("accessToken");
       const response = await axios.get(
-        `https://dt-backend.mpst.me/repository/generate?repo=${slug}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/repository/generate?repo=${slug}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         }
       );
-      const data = await response.json();
+      const data = response.data;
       setData(data.data);
       setData(data);
-      console.log(data);
+      console.log(response.data);
     };
     fetchData();
   }, []);
@@ -57,10 +58,10 @@ export default function Dashi({ slug }) {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="vulnerability">
-        <VulnerabilityAnalysis slug={slug} />
+        <VulnerabilityAnalysis data={data} />
       </TabsContent>
       <TabsContent value="readme">
-        <ReadmeGenerator slug />
+        <ReadmeGenerator data={data.data.readme} />
       </TabsContent>
       <TabsContent value="review">
         <CodeReview slug />

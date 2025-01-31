@@ -6,8 +6,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { FileText } from "lucide-react";
+import Markdown from "react-markdown";
 
-export default function ReadmeGenerator({slug}) {
+export default function ReadmeGenerator({ data }) {
   return (
     <Card>
       <CardHeader>
@@ -20,9 +21,8 @@ export default function ReadmeGenerator({slug}) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <p>README generator content will be displayed here.</p>
-        {/* Add more content and components for README generation */}
-        
+        <Markdown>{data.readme}</Markdown>
+        {/* {JSON.stringify(data.readme.readme)} */}
       </CardContent>
     </Card>
   );

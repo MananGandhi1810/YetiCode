@@ -47,10 +47,10 @@ export default function ProjectList() {
       try {
         const accessToken = localStorage.getItem("accessToken");
         const [projectsResponse, reposResponse] = await Promise.all([
-          axios.get("https://dt-backend.mpst.me/webhook/list", {
+          axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/webhook/list`, {
             headers: { authorization: `Bearer ${accessToken}` },
           }),
-          axios.get("https://dt-backend.mpst.me/repository/list", {
+          axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/repository/list`, {
             headers: { authorization: `Bearer ${accessToken}` },
           }),
         ]);
@@ -73,13 +73,13 @@ export default function ProjectList() {
       const accessToken = localStorage.getItem("accessToken");
       console.log(repo);
       await axios.post(
-        `https://dt-backend.mpst.me/repository/create-webhook?repo=${repo.url}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/repository/create-webhook?repo=${repo.url}`,
         {},
         { headers: { authorization: `Bearer ${accessToken}` } }
       );
       // Refresh the projects list after adding
       const projectsResponse = await axios.get(
-        "https://dt-backend.mpst.me/webhook/list",
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/webhook/list`,
         {
           headers: { authorization: `Bearer ${accessToken}` },
         }
