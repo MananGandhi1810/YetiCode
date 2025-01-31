@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { Suspense } from "react";
 
 import mermaid from "mermaid";
 
@@ -24,16 +25,18 @@ const MermaidChart = ({ chartData }) => {
 const FlowChartPage = ({ chartData }) => {
   console.log("datataa ", chartData);
 
-  const cleanedData = chartData.replace(/\\n/g, "\n").replace(/[()/]/g, "");
+  const cleanedData = chartData?.replace(/\\n/g, "\n").replace(/[()/]/g, "");
   return (
-    <div className="w-full mx-auto">
-      <h1 className="text-2xl font-bold mb-4">System Flow Chart</h1>
-      {/* <TransformWrapper>
+    <Suspense fallback={<>Loading...</>}>
+      <div className="w-full mx-auto">
+        <h1 className="text-2xl font-bold mb-4">System Flow Chart</h1>
+        {/* <TransformWrapper>
         <TransformComponent> */}
-      <MermaidChart chartData={cleanedData} />
-      {/* </TransformComponent>
+        <MermaidChart chartData={cleanedData} />
+        {/* </TransformComponent>
       </TransformWrapper> */}
-    </div>
+      </div>{" "}
+    </Suspense>
   );
 };
 
