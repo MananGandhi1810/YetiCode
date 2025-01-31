@@ -74,6 +74,7 @@ def get_file_tree(repo: str, access_token: str) -> str:
         },
     )
     if response.status_code >= 300:
+        print(response.status_code)
         raise Exception("Not Found")
     zip = ZipFile(io.BytesIO(response.content))
     file_tree = []
