@@ -44,7 +44,6 @@ export default function Dashi({ slug }) {
         setError(null);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setError("Failed to fetch data. Using dummy data.");
         setData({
           scan: [
             {
@@ -781,7 +780,6 @@ export default function Dashi({ slug }) {
         <div className="mt-4">{renderSkeleton()}</div>
       ) : (
         <>
-          {error && <div className="text-red-500 mt-4">{error}</div>}
           <TabsContent value="vulnerability">
             <VulnerabilityAnalysis data={data?.scan} />
           </TabsContent>
