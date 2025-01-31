@@ -714,22 +714,25 @@ export default function Dashi({ slug }) {
       },
     },
   });
-  console.log(data.data.readme);
+  console.log(data);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const accessToken = localStorage.getItem("accessToken")
-  //     const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/repository/generate?repo=${slug}`, {
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`,
-  //       },
-  //     })
-  //     const data = response.data
-  //     setData(data.data)
-  //     console.log(response.data)
-  //   }
-  //   fetchData()
-  // }, [slug])
+  useEffect(() => {
+    const fetchData = async () => {
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/repository/generate?repo=${slug}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const data = response.data;
+      setData(data.data);
+      console.log(response.data);
+    };
+    fetchData();
+  }, [slug]);
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -756,13 +759,13 @@ export default function Dashi({ slug }) {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="vulnerability">
-        <VulnerabilityAnalysis data={data.data.scan} />
+        <VulnerabilityAnalysis data={data.scan} />
       </TabsContent>
       <TabsContent value="readme">
-        <ReadmeGenerator data={data.data.readme} />
+        <ReadmeGenerator data={data.readme} />
       </TabsContent>
       <TabsContent value="review">
-        <CodeReview data={data.data.testsuite} />
+        <CodeReview data={data.testsuite} />
       </TabsContent>
       <TabsContent value="chat">
         <ChatWithRepo />
