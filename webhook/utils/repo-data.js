@@ -1,5 +1,22 @@
 import { exists, get, set } from "./keyvalue-db.js";
 
+const getFileTree = async (repo, ghAccessToken, cached = true) => {
+    if ((await exists(`${repo}:filetree`)) && cached) {
+        return {
+            success: true,
+            data: JSON.parse(await get(`${repo}:scan`)),
+            message: "Fetched data succesfully",
+        };
+    }
+    const response = await fetch(
+        `${process.env.PY_URL}/parse?repo=${repo}&accessToken=${ghAccessToken}`,
+    ).then(async (data) => {
+        return await data.json();
+    });
+    await set(`${repo}:filetree`, JSON.stringify(response.data), 3600 * 3);
+    return response;
+};
+
 const scanRepository = async (repo, ghAccessToken, cached = true) => {
     if ((await exists(`${repo}:scan`)) && cached) {
         return {
@@ -68,4 +85,10 @@ const generateReadMe = async (repo, ghAccessToken, cached = true) => {
     return response;
 };
 
-export { scanRepository, generateTestSuite, generateDiagram, generateReadMe };
+export {
+    getFileTree,
+    scanRepository,
+    generateTestSuite,
+    generateDiagram,
+    generateReadMe,
+};

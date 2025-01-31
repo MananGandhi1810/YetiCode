@@ -3,6 +3,7 @@ import {
     generateDiagram,
     generateReadMe,
     generateTestSuite,
+    getFileTree,
     scanRepository,
 } from "../utils/repo-data.js";
 import { PrismaClient } from "@prisma/client";
@@ -88,13 +89,21 @@ const generateRepositoryDataHandler = async (req, res) => {
         });
     }
 
-    const [scan, testsuite, diagram, readme] = await Promise.all([
+    const [filetree, scan, testsuite, diagram, readme] = await Promise.all([
+        getFileTree(repo, ghAccessToken),
         scanRepository(repo, ghAccessToken),
         generateTestSuite(repo, ghAccessToken),
         generateDiagram(repo, ghAccessToken),
         generateReadMe(repo, ghAccessToken),
     ]);
 
+    if (!filetree.success) {
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred when parsing code",
+            data: null,
+        });
+    }
     if (!scan.success) {
         return res.status(500).json({
             success: false,
@@ -128,6 +137,7 @@ const generateRepositoryDataHandler = async (req, res) => {
         success: true,
         message: "Data generated successfully",
         data: {
+            filetree: scan.data.file_tree,
             scan: scan.data.security_data,
             testsuite: testsuite.data.testsuite,
             diagram: diagram.data.diagram,
