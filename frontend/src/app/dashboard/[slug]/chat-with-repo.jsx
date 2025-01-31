@@ -13,18 +13,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MessageSquare, Send } from "lucide-react";
-import { ArrowUp } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 
 export default function ChatWithRepo({ slug }) {
-  console.log(slug);
+  const accessToken = localStorage.getItem("accessToken");
+  console.log("sludge", slug);
   const [messages, setMessages] = useState([
     {
-      id: 1,
-      content: "Hello! How can I help you with your repository today?",
-      sender: "ai",
+      role: "user",
+      content: "",
+    },
+    {
+      role: "assistant",
+      content:
+        "Hello! I'm your AI assistant for this repository. How can I help you today?",
     },
   ]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -37,31 +43,51 @@ export default function ChatWithRepo({ slug }) {
     scrollToBottom();
   }, [messages, scrollToBottom]); // Added scrollToBottom to dependencies
 
-  const handleSend = () => {
-    if (input.trim()) {
-      // Add user message
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    const userMessage = { role: "user", content: input };
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: [...messages, userMessage],
+          slug,
+          accessToken,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to get response");
+      }
+
+      const data = await response.json();
+      const assistantMessage = { role: "assistant", content: data.response };
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error("Error:", error);
       setMessages((prev) => [
         ...prev,
-        { id: prev.length + 1, content: input, sender: "user" },
+        {
+          role: "assistant",
+          content: "Sorry, I encountered an error. Please try again.",
+        },
       ]);
-      setInput("");
-
-      // Simulate AI response
-      setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: prev.length + 1,
-            content: `I've analyzed your request: "${input}". How else can I assist you with your repository?`,
-            sender: "ai",
-          },
-        ]);
-      }, 1000);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <Card className="w-full h-[600px] flex flex-col">
+    <Card className="w-full h-[800px] flex flex-col">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <MessageSquare className="w-6 h-6 text-pink-500" />
@@ -72,23 +98,25 @@ export default function ChatWithRepo({ slug }) {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-grow overflow-hidden">
-        <ScrollArea className="h-[400px] w-full pr-4" ref={scrollAreaRef}>
+        <ScrollArea className="h-[600px] w-full pr-4" ref={scrollAreaRef}>
           <div className="space-y-4">
-            {messages.map((message) => (
+            {messages.slice(1).map((message, index) => (
               <div
-                key={message.id}
+                key={index}
                 className={`flex ${
-                  message.sender === "user" ? "justify-end" : "justify-start"
+                  message.role === "user" ? "justify-end" : "justify-start"
                 }`}
               >
                 <div
                   className={`max-w-[80%] p-3 rounded-lg ${
-                    message.sender === "user"
+                    message.role === "user"
                       ? "bg-blue-500 text-white"
                       : "bg-gray-200 text-gray-800"
                   }`}
                 >
-                  {message.content}
+                  <ReactMarkdown className="prose max-w-none">
+                    {message.content}
+                  </ReactMarkdown>
                 </div>
               </div>
             ))}
@@ -97,10 +125,7 @@ export default function ChatWithRepo({ slug }) {
       </CardContent>
       <CardFooter>
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSend();
-          }}
+          onSubmit={handleSubmit}
           className="flex w-full items-center space-x-2"
         >
           <Input
@@ -108,9 +133,10 @@ export default function ChatWithRepo({ slug }) {
             placeholder="Type your message..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            disabled={isLoading}
           />
-          <Button type="submit" size="icon">
-            <ArrowUp className="h-4 w-4"></ArrowUp>
+          <Button type="submit" size="icon" disabled={isLoading}>
+            <Send className="h-4 w-4" />
             <span className="sr-only">Send</span>
           </Button>
         </form>

@@ -92,7 +92,33 @@ export default function ProjectList() {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-7xl p-5 space-y-10 lg:px-8 lg:py-32">
+        <div className="flex justify-between items-center">
+          <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+            Projects
+          </h1>
+          <Button disabled>
+            <Plus className="mr-2 h-4 w-4" /> Loading...
+          </Button>
+        </div>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {[...Array(6)].map((_, index) => (
+            <Card key={index} className="animate-pulse">
+              <CardHeader>
+                <div className="h-6 bg-gray-300 rounded w-3/4"></div>
+              </CardHeader>
+              <CardContent>
+                <div className="h-4 bg-gray-300 rounded w-1/2 mb-2"></div>
+                <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    );
+  }
   if (error) return <div>Error: {error}</div>;
 
   return (
